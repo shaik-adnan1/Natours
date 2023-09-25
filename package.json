@@ -1,0 +1,24 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "A travel website where you can explore different plans, tours and adventures and book your place to the exciting journey",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com.shaik-adnan1/Natours.git"
+  },
+  "keywords": [
+    "Node.Js",
+    "Express.Js",
+    "MongoDb"
+  ],
+  "author": "Sk. Adnan S",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}
