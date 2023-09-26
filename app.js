@@ -32,6 +32,33 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+app.get('/api/v1/tours/:id', (req, res) => {
+  // My code
+
+  const id = req.params.id;
+  const reqTour = tours[id];
+
+  // Alternative
+  // const id = req.params.id * 1;
+  // const tour = tours.find(el => el.id === id)
+
+    // if (id > tours.length) {
+  if (!reqTour) {
+    res.status(400).json({ status: 'fail', message: 'invalid ID' });
+  } else {
+    // retrieving tour matching to id parameter
+
+    // console.log()
+    res.status(200).json({
+      status: 'Success',
+      // results: tours.length,
+      data: {
+        reqTour,
+      },
+    });
+  }
+});
+
 // POST request
 app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
@@ -40,18 +67,21 @@ app.post('/api/v1/tours', (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   // creating new Object with id and requested tour data from req.data
   const newTour = Object.assign({ id: newId }, req.body);
-  // Pushing the new tour to tours 
+  // Pushing the new tour to tours
   tours.push(newTour);
-  // writing the tours file with all new tours 
-  fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
-    res.status(201).json({
+  // writing the tours file with all new tours
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res.status(201).json({
         status: 'success',
         data: {
-            tour: newTour
-        }
-    })
-  })
-
+          tour: newTour,
+        },
+      });
+    }
+  );
 });
 
 const port = 3000;
