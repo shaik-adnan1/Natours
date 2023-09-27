@@ -4,6 +4,7 @@
 // ----------- USERS handling functions -----------
 
 exports.getAllUsers = (req, res) => {
+  console.log("working")
   res.status(500).json({
     status: 'error',
     message: 'this route has not yet been defined',

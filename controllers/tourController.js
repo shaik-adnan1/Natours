@@ -1,9 +1,16 @@
-const { createVerify } = require('crypto');
+
 const fs = require('fs');
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
+
+exports.checkID = (req, res, next, val) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(400).json({ status: 'fail', message: 'invalid ID' });
+  }
+  next();
+}
 
 // --------- ROUTE HANDLERS ----------
 // these below functions ⬇️ are called route handler or CONTROLLERS
@@ -35,20 +42,16 @@ exports.getTourByID = (req, res) => {
   // const tour = tours.find(el => el.id === id)
 
   // if (id > tours.length) {
-  if (!reqTour) {
-    res.status(400).json({ status: 'fail', message: 'invalid ID' });
-  } else {
-    // retrieving tour matching to id parameter
-
-    // console.log()
-    res.status(200).json({
-      status: 'Success',
-      // results: tours.length,
-      data: {
-        reqTour,
-      },
-    });
-  }
+  
+  // retrieving tour matching to id parameter
+  // console.log()
+  res.status(200).json({
+    status: 'Success',
+    // results: tours.length,
+    data: {
+      reqTour,
+    },
+  });
 };
 
 // ----------- addNewTour -----------
@@ -80,27 +83,38 @@ exports.addNewTour = (req, res) => {
 // ----------- updateTour -----------
 
 exports.updateTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    res.status(400).json({ status: 'fail', message: 'invalid ID' });
-  } else {
-    res.status(200).json({
-      status: 'success',
-      data: {
-        tour: '<Updated tour here...>',
-      },
-    });
-  }
+  
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here...>',
+    },
+  });
 };
 
 // ----------- deleteTour -----------
 
 exports.deleteTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    res.status(400).json({ status: 'fail', message: 'invalid ID' });
-  } else {
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  }
+  
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+};
+
+// ------------ checkBody ------------
+
+exports.checkBody = (req, res, next) => {
+  // console.log(req.body);
+  // console.log(req.body.name);
+  // console.log(req.body.description);
+  // console.log(req.body.price);
+
+ if(!req.body.name || !req.body.price) {
+  res.status(400).json({
+    status: 'fail',
+    message: 'Please fill in all fields',
+  })
+ }
+ next();
 };
