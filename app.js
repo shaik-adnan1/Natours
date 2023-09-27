@@ -6,22 +6,15 @@ const app = express();
 // Middleware -> a function that can modify the incoming request data
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//     res.status(200).json({message: 'Hello from the server side' , app: 'Natours'})
-// })
-
-// app.post('/', (req, res) => {
-//     res.send('You can post to this url endpoint')
-// })
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// get basically setups a GET request(method) in the api route
+// these below functions ⬇️ are called route handler
 
-// GET request
-app.get('/api/v1/tours', (req, res) => {
+// ----------- getAllTours -----------
+
+const getAllTours = (req, res) => {
   // this function is called route handler
   res.status(200).json({
     status: 'Success',
@@ -30,9 +23,11 @@ app.get('/api/v1/tours', (req, res) => {
       tours: tours,
     },
   });
-});
+};
 
-app.get('/api/v1/tours/:id', (req, res) => {
+// ----------- getTourByID -----------
+
+const getTourByID = (req, res) => {
   // My code
 
   const id = req.params.id;
@@ -42,7 +37,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
   // const id = req.params.id * 1;
   // const tour = tours.find(el => el.id === id)
 
-    // if (id > tours.length) {
+  // if (id > tours.length) {
   if (!reqTour) {
     res.status(400).json({ status: 'fail', message: 'invalid ID' });
   } else {
@@ -57,10 +52,11 @@ app.get('/api/v1/tours/:id', (req, res) => {
       },
     });
   }
-});
+};
 
-// POST request
-app.post('/api/v1/tours', (req, res) => {
+// ----------- addNewTour -----------
+
+const addNewTour = (req, res) => {
   // console.log(req.body);
 
   // taking id from previous object from the tours array
@@ -82,42 +78,64 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
-// PATCH -- implementing path handling
+// ----------- updateTour -----------
 
-app.patch('/api/v1/tours/:id', (req, res) => {
-
+const updateTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     res.status(400).json({ status: 'fail', message: 'invalid ID' });
   } else {
-
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
-        tour: '<Updated tour here...>'
-      }
-    })
+        tour: '<Updated tour here...>',
+      },
+    });
   }
-});
+};
 
-// DELETE -- implementing delete request
+// ----------- deleteTour -----------
 
-app.delete('/api/v1/tours/:id', (req, res) => {
-
+const deleteTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     res.status(400).json({ status: 'fail', message: 'invalid ID' });
   } else {
     res.status(204).json({
       status: 'success',
-      data: null
+      data: null,
     });
   }
-});
+};
+// get basically setups a GET request(method) in the api route
 
-const port = 3000;
+// ----------- CRUD OPERATIONS -----------
+
+// GET request
+/*
+app.get('/api/v1/tours', getAllTours); // <=>
+app.get('/api/v1/tours/:id', getTourByID);
+
+// POST request
+app.post('/api/v1/tours', addNewTour);
+
+// PATCH -- implementing path handling
+app.patch('/api/v1/tours/:id', updateTour);
+
+// DELETE -- implementing delete request
+app.delete('/api/v1/tours/:id', deleteTour);
+*/
+
+// ------------ Chaining crud methods -----------
+
+app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
+
+app.route('/api/v1/tours/:id').get(getTourByID).patch(updateTour).delete(deleteTour);
+
+
 // 1. creating a route on certain port
 // => (app.listen) <= runs a callback function on port specified.
+const port = 3000;
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
