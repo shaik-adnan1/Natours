@@ -84,6 +84,37 @@ app.post('/api/v1/tours', (req, res) => {
   );
 });
 
+// PATCH -- implementing path handling
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+
+  if (req.params.id * 1 > tours.length) {
+    res.status(400).json({ status: 'fail', message: 'invalid ID' });
+  } else {
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour: '<Updated tour here...>'
+      }
+    })
+  }
+});
+
+// DELETE -- implementing delete request
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+
+  if (req.params.id * 1 > tours.length) {
+    res.status(400).json({ status: 'fail', message: 'invalid ID' });
+  } else {
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  }
+});
+
 const port = 3000;
 // 1. creating a route on certain port
 // => (app.listen) <= runs a callback function on port specified.
