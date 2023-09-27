@@ -1,6 +1,6 @@
 const fs = require('fs');
 const express = require('express');
-const morgan = require('morgan')
+const morgan = require('morgan');
 
 const app = express();
 
@@ -22,14 +22,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
-  );
+);
 
 // --------- ROUTE HANDLERS ----------
-// these below functions ⬇️ are called route handler
+// these below functions ⬇️ are called route handler or CONTROLLERS
 // ----------- getAllTours -----------
 
 const getAllTours = (req, res) => {
@@ -127,6 +125,44 @@ const deleteTour = (req, res) => {
     });
   }
 };
+
+// ----------- USERS handling functions -----------
+
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route has not yet been defined'
+  })
+}
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route has not yet been defined'
+  })
+}
+
+const getUserByID = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route has not yet been defined'
+  })
+}
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route has not yet been defined'
+  })
+}
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'this route has not yet been defined'
+  })
+}
+
 // get basically setups a GET request(method) in the api route
 
 // ----------- CRUD OPERATIONS -----------
@@ -150,13 +186,28 @@ app.delete('/api/v1/tours/:id', deleteTour);
 
 // ------------ ROUTES ----------------
 
-app.route('/api/v1/tours').get(getAllTours).post(addNewTour);
+const tourRouter = express.Router(); // -> this is also a middleware
+const userRouter = express.Router();
 
-app
-  .route('/api/v1/tours/:id')
+tourRouter.route('/').get(getAllTours).post(addNewTour);
+
+tourRouter
+  .route('/:id')
   .get(getTourByID)
   .patch(updateTour)
   .delete(deleteTour);
+
+userRouter.route('/').get(getAllUsers).post(createUser);
+
+userRouter
+  .route('/:id')
+  .get(getUserByID)
+  .patch(updateUser)
+  .delete(deleteUser);
+
+// Created new two sub routers 
+app.use('/api/v1/tours', tourRouter);
+app.use('api/v1/users', userRouter);
 
 // 1. creating a route on certain port
 // => (app.listen) <= runs a callback function on port specified.
