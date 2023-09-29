@@ -4,7 +4,8 @@
   "description": "A travel website where you can explore different plans, tours and adventures and book your place to the exciting journey",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=development nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongoose": "^7.5.3",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1"
   },
