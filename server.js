@@ -1,4 +1,4 @@
-const mongooese = require('mongoose');
+// const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 const app = require('./app');
@@ -20,37 +20,8 @@ const DB = process.env.DATABASE.replace(
 // ----------------- Connecting MONGODB database with mongoose.connect() ----------------
 mongoose
   .connect(DB)
-  // .then((con) => console.log(con.connections))
+  .then((con) => console.log('Database successfully connected'))
   .catch((err) => console.log(err));
-
-// ----------------- creating schema ----------------
-
-const toursSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, `Tour must have a name`],
-    unique: true
-  },
-  rating: {
-    type: Number, 
-    default: 4.5
-  },
-  price: {
-    type: Number,
-    required: [true, `Tour must have a price`] // Schema type options -- objects
-  },
-})
-
-// const usersSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: [true, `User must have a name`]
-//   }
-// })
-
-// const User = mongoose.model('User', userSchema);
-const Tour = mongoose.model('Tour', toursSchema)
-
 
 // 1. creating a route on certain port
 // => (app.listen) <= runs a callback function on port specified.

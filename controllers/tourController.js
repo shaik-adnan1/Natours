@@ -1,16 +1,4 @@
-
-const fs = require('fs');
-
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
-
-exports.checkID = (req, res, next, val) => {
-  if (req.params.id * 1 > tours.length) {
-    return res.status(400).json({ status: 'fail', message: 'invalid ID' });
-  }
-  next();
-}
+const Tour = require('../models/tourModel');
 
 // --------- ROUTE HANDLERS ----------
 // these below functions ⬇️ are called route handler or CONTROLLERS
@@ -21,11 +9,11 @@ exports.getAllTours = (req, res) => {
   // this function is called route handler
   res.status(200).json({
     status: 'Success',
-    results: tours.length,
-    requestAt: req.requestTime,
-    data: {
-      tours: tours,
-    },
+    // results: tours.length,
+    // requestAt: req.requestTime,
+    // data: {
+    //   tours: tours,
+    // },
   });
 };
 
@@ -35,7 +23,7 @@ exports.getTourByID = (req, res) => {
   // My code
 
   const id = req.params.id;
-  const reqTour = tours[id];
+  // const reqTour = tours[id];
 
   // Alternative
   // const id = req.params.id * 1;
@@ -45,39 +33,40 @@ exports.getTourByID = (req, res) => {
   
   // retrieving tour matching to id parameter
   // console.log()
+  
   res.status(200).json({
     status: 'Success',
     // results: tours.length,
-    data: {
-      reqTour,
-    },
+    // data: {
+    //   reqTour,
+    // },
   });
 };
 
 // ----------- addNewTour -----------
 
-exports.addNewTour = (req, res) => {
-  // console.log(req.body);
+exports.addNewTour = async (req, res) => {
+  
+  // const newTour = new Tour({})
+  // newTour.save();
 
-  // taking id from previous object from the tours array
-  const newId = tours[tours.length - 1].id + 1;
-  // creating new Object with id and requested tour data from req.data
-  const newTour = Object.assign({ id: newId }, req.body);
-  // Pushing the new tour to tours
-  tours.push(newTour);
-  // writing the tours file with all new tours
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    (err) => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          tour: newTour,
-        },
-      });
-    }
-  );
+  try {
+    
+    const newTour = await Tour.create(req.body)
+  
+    res.status(201).json({
+          status: 'success',
+          data: {
+            tour: newTour,
+          },
+        });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent or duplicate data found!',
+    })
+  }
+
 };
 
 // ----------- updateTour -----------
@@ -104,17 +93,17 @@ exports.deleteTour = (req, res) => {
 
 // ------------ checkBody ------------
 
-exports.checkBody = (req, res, next) => {
-  // console.log(req.body);
-  // console.log(req.body.name);
-  // console.log(req.body.description);
-  // console.log(req.body.price);
+// exports.checkBody = (req, res, next) => {
+//   // console.log(req.body);
+//   // console.log(req.body.name);
+//   // console.log(req.body.description);
+//   // console.log(req.body.price);
 
- if(!req.body.name || !req.body.price) {
-  res.status(400).json({
-    status: 'fail',
-    message: 'Please fill in all fields',
-  })
- }
- next();
-};
+//  if(!req.body.name || !req.body.price) {
+//   res.status(400).json({
+//     status: 'fail',
+//     message: 'Please fill in all fields',
+//   })
+//  }
+//  next();
+// };
