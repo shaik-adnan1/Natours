@@ -6,6 +6,8 @@ const { default: mongoose } = require('mongoose');
 
 // ----------------- CONFIGURING DOTENV FOR ENVIRON Variables ----------------
 
+// retryWrites=true&w=majority
+
 dotenv.config({
   path: `${__dirname}/config.env`,
 });
@@ -15,9 +17,10 @@ dotenv.config({
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
-);
-
-// ----------------- Connecting MONGODB database with mongoose.connect() ----------------
+  );
+  console.log(DB)
+  
+  // ----------------- Connecting MONGODB database with mongoose.connect() ----------------
 mongoose
   .connect(DB)
   .then((con) => console.log('Database successfully connected'))
