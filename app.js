@@ -50,6 +50,7 @@ app.delete('/api/v1/tours/:id', deleteTour);
 
 // Created new two sub routers
 app.use('/api/v1/tours', tourRouter);
+app.use('/', initialLogRoute);
 app.use('/api/v1/users', userRouter);
 
 module.exports = app;
